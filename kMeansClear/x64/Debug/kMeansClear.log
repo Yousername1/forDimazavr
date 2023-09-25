@@ -1,0 +1,7 @@
+﻿  Core.cpp
+C:\Users\ram00\Projects\Cpp\forDimazavr\kMeansClear\Core.cpp(87,12): warning C4244: 'return': conversion from '__int64' to 'int', possible loss of data
+C:\Users\ram00\Projects\Cpp\forDimazavr\kMeansClear\Core.cpp(164,13): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+  Main.cpp
+C:\Users\ram00\Projects\Cpp\forDimazavr\kMeansClear\Main.cpp(4,1): warning C4326: return type of 'main' should be 'int' instead of 'void'
+  Generating Code...
+  kMeansClear.vcxproj -> C:\Users\ram00\Projects\Cpp\forDimazavr\kMeansClear\x64\Debug\kMeansClear.exe
