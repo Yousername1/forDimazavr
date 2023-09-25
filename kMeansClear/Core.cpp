@@ -138,6 +138,7 @@ void Core::getCenters()
 	}
 }
 
+
 Mat Core::getCusteredImg()
 {
 	Mat clusteredImage = Mat::zeros(grayscaleImage.rows, grayscaleImage.cols, CV_8U);
@@ -147,40 +148,52 @@ Mat Core::getCusteredImg()
 	int D = 0;
 	int min = 0;
 	vector<int> distances(centers.size(), 0);
-	vector<int> intraclusterCounterIn(centers.size(), 0); //
-
-	//???
-	vector<int> centroid1;
-	vector<int> centroid2;
-	vector<int> centroid3;
-	//END ???
-
 
 	for (int i = 0; i < grayscaleImage.cols; i++) {
 		for (int j = 0; j < grayscaleImage.rows; j++) {
 			y = grayscaleImage.at<uchar>(j, i);
 
-			for (int k = 0; k < centers.size(); k++) {
-				D = sqrt(pow((y - centers[k]), 2));
-				distances[k] = D;
-			}
+			do {
+				for (int k = 0; k < centers.size(); k++) {
+					D = sqrt(pow((y - centers[k]), 2));
+					distances[k] = D;
+				}
 
-			min = *min_element(distances.begin(), distances.end());
-			y_out = centers[Core::getPosition(distances, min)];
+				min = *min_element(distances.begin(), distances.end());
+				y_out = centers[Core::getPosition(distances, min)];
 
+				vector<vector<int>> clusters;
 
-			intraclusterCounterIn[Core::getPosition(distances, min)] += 1;
+				int m = 0;
+				while (y_out != centers[m]) {
+					m++;
+				}
+				int n = 0;
+				while (true) {
+					clusters[m][n] = y;
+					n++;
+				}
 
-			if (y_out > 255) {
-				y_out = centers[Core::getPosition(distances, 
-					(*max_element(centers.begin(), centers.end())))];
-			}
+				vector<int> currentCenters;
+				int sum = 0;
+				int mediana = 0;
+				for (vector<int> row : clusters) {
+					for (int val : row) {
+						sum += val;
+					}
+					mediana = sum / row.size();
+					currentCenters.push_back(mediana);
+				}
+				if (currentCenters != centers) {
+					centers = currentCenters;
+				}
+
+			} while (true);
 
 			clusteredImage.at<uchar>(j, i) = y_out;
 		}
 	}
 
-	this->intraclusterCounter = intraclusterCounterIn; //
 
 	return clusteredImage;
 }

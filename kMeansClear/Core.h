@@ -25,6 +25,7 @@ private:
 	vector<int> centers;
 	vector<int> predictedCenters;
 	vector<int> intraclusterCounter;
+	vector<vector<int>> centroids;
 
 	void setVectorY(Mat histogram);
 	vector<int> getVector();
@@ -32,7 +33,6 @@ private:
 	int getPosition(vector<int> histogramVector, int value);
 	int findPeak(vector<int> vec);
 	int findMin(vector<int> vec);
-	
 
 
 public:
