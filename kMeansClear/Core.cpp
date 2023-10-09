@@ -109,7 +109,7 @@ int Core::findMin(vector<int> histogramVector)
 }
 
 
-vector<int> Core::makePredict()
+vector<int> Core::doPredict()
 {
 	predictedCenters.push_back(Core::findPeak(histogramVec));
 	predictedCenters.push_back(Core::findMin(histogramVec));
@@ -130,6 +130,22 @@ void Core::setCenters(vector<int> centers)
 	this->centers = centers;
 }
 
+void Core::setCenters()
+{
+	cout << "Warning: extra centers will be deleted." << endl;
+	cout << "Enter " << Core::getClusterNumbers() << " centers: ";
+	int currentCenter = 0;
+	vector<int> consoleTypingCenters(Core::getClusterNumbers(), 0);
+	for (int i = 0; i < consoleTypingCenters.size(); i++) {
+		cin >> currentCenter;
+		consoleTypingCenters[i] = currentCenter;
+	}
+	cout << endl << endl << endl;	
+	Core::setCenters(consoleTypingCenters);
+}
+
+
+
 
 void Core::getCenters()
 {
@@ -137,7 +153,6 @@ void Core::getCenters()
 		cout << centers[i] << " ";
 	}
 }
-
 
 Mat Core::getCusteredImg()
 {
@@ -148,53 +163,57 @@ Mat Core::getCusteredImg()
 	int D = 0;
 	int min = 0;
 	vector<int> distances(centers.size(), 0);
+	vector<vector<int>> clusters(Core::getClusterNumbers());
+	vector<int> temp(3, 0);
+	vector<int> currentCenters;
 
-	for (int i = 0; i < grayscaleImage.cols; i++) {
-		for (int j = 0; j < grayscaleImage.rows; j++) {
-			y = grayscaleImage.at<uchar>(j, i);
+	do {
 
-			do {
-				for (int k = 0; k < centers.size(); k++) {
-					D = sqrt(pow((y - centers[k]), 2));
+		currentCenters.clear();
+		temp = centers;
+
+		for (int i = 0; i < Core::getClusterNumbers(); i++) {
+			clusters[i].clear();
+		}
+
+		for (int i = 0; i < grayscaleImage.cols; i++) {
+			for (int j = 0; j < grayscaleImage.rows; j++) {
+				y = grayscaleImage.at<uchar>(j, i);
+
+				for (int k = 0; k < temp.size(); k++) {
+					D = sqrt(pow((y - temp[k]), 2));
 					distances[k] = D;
 				}
 
 				min = *min_element(distances.begin(), distances.end());
-				y_out = centers[Core::getPosition(distances, min)];
-
-				vector<vector<int>> clusters;
+				y_out = temp[Core::getPosition(distances, min)];
 
 				int m = 0;
-				while (y_out != centers[m]) {
+				while (y_out != temp[m]) {
 					m++;
 				}
-				int n = 0;
-				while (true) {
-					clusters[m][n] = y;
-					n++;
-				}
 
-				vector<int> currentCenters;
-				int sum = 0;
-				int mediana = 0;
-				for (vector<int> row : clusters) {
-					for (int val : row) {
-						sum += val;
-					}
-					mediana = sum / row.size();
-					currentCenters.push_back(mediana);
-				}
-				if (currentCenters != centers) {
-					centers = currentCenters;
-				}
-
-			} while (true);
-
-			clusteredImage.at<uchar>(j, i) = y_out;
+				clusters[m].push_back(y);
+				clusteredImage.at<uchar>(j, i) = y_out;
+			}
 		}
-	}
 
+
+		int mediana = 0;
+		for (vector<int> row : clusters) {
+			int sum = 0;
+			for (int val : row) {
+				sum += val;
+			}
+			mediana = sum / row.size();
+			currentCenters.push_back(mediana);
+		}
+
+		centers = currentCenters;
+
+	} while (centers != temp);
 
 	return clusteredImage;
 }
+
 

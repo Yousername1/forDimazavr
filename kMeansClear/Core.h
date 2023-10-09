@@ -4,8 +4,8 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <stdlib.h> 
 #include <vector>
-#include "time.h"
-#include <ctime>
+//#include "time.h"
+//#include <ctime>
 
 using namespace std;
 using namespace cv;
@@ -17,8 +17,6 @@ private:
 	Mat inputImage;
 	Mat workingImage = inputImage.clone();
 	Mat grayscaleImage = Mat::zeros(workingImage.rows, workingImage.cols, CV_8U);
-	Mat quantizedImage = Mat::zeros(grayscaleImage.rows, grayscaleImage.cols, CV_8U);
-	Mat clusteredImage = Mat::zeros(grayscaleImage.rows, grayscaleImage.cols, CV_8U);
 
 	int clusterNumbers;
 	vector<int> histogramVec;
@@ -33,6 +31,7 @@ private:
 	int getPosition(vector<int> histogramVector, int value);
 	int findPeak(vector<int> vec);
 	int findMin(vector<int> vec);
+	
 
 
 public:
@@ -44,15 +43,17 @@ public:
 	Mat getGrayscaledImg(Mat inputImage);
 	Mat getHist(Mat nonColorImage);
 
-	vector<int> makePredict();
+	vector<int> doPredict();
+	void showPredict();
+
 	void setCenters(vector<int> centers);
+	void setCenters();
 	void getCenters();
 
 	Mat getCusteredImg();
 
 	//DEBUG ONLY
 	void showVector();
-	void showPredict();
 
 };
 

@@ -7,40 +7,36 @@ void main()
     imshow("Source img", img);
 
     Core wImg(img);
-    wImg.getGrayscaledImg(img);
     imshow("grayscaledImage", wImg.getGrayscaledImg(img));
     imshow("Histogram", wImg.getHist(wImg.getGrayscaledImg(img)));
+    cout << endl << endl << endl;
+    cv::waitKey(1);
 
-    wImg.setClusterNumbers(3); //NADO SDELAT VVOD S KONSOLI
+
+    cout << "Enter number of clusters: ";
+    int clustersFromUser = 0;
+    cin >> clustersFromUser;
+    wImg.setClusterNumbers(clustersFromUser);
 
     //DEBUG ONLY
-    wImg.showVector();
-    cout << endl << endl << endl;
-    cout << wImg.getClusterNumbers() << endl << endl;
-    cout << endl << endl << endl;
-    //END OF DEGBUG
+    //wImg.showVector();
+    //cout << endl << endl << endl;
+    //END OF DEBUG
 
-    wImg.makePredict();
+    wImg.doPredict();
     cout << "Extremums of histogram (max min): ";
     wImg.showPredict();
-    cout << endl << endl << endl;
+    cout << endl;
 
-    cout << "Enter " << wImg.getClusterNumbers() << " centers: ";
-    int a, b, c; //THINK ABOUT IT
-    cin >> a >> b >> c; // SAME
-    //vector<int> cent = { 0, 135, 255 };
-    //vector<int> cent = { rand() % 256, rand() % 256, rand() % 256 };
-    vector<int> cent = { a, b, c };
-    wImg.setCenters(cent);
+    wImg.setCenters();
 
-    //DEBUG ONLY
-    //cout << endl << endl << endl;
-    //wImg.getCenters();
-    //END OF DEGBUG
 
     imshow("Clustered Image", wImg.getCusteredImg());
     imshow("HistClus", wImg.getHist(wImg.getCusteredImg()));
+    cout << endl << endl << endl;
 
+    cout << "Final centers: ";
+    wImg.getCenters();
 
     cv::waitKey();
 }
