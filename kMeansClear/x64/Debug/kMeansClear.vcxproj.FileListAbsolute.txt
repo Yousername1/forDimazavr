@@ -1,1 +1,2 @@
 C:\Users\ram00\Projects\Cpp\IntAnDan2023\kMeansClear\x64\Debug\kMeansClear.exe
+C:\Users\ram00\Projects\Cpp\forDimazavr\kMeansClear\x64\Debug\kMeansClear.exe

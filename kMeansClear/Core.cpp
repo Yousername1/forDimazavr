@@ -109,6 +109,7 @@ int Core::findMin(vector<int> histogramVector)
 }
 
 
+
 vector<int> Core::doPredict()
 {
 	predictedCenters.push_back(Core::findPeak(histogramVec));
@@ -145,14 +146,13 @@ void Core::setCenters()
 }
 
 
-
-
 void Core::getCenters()
 {
 	for (int i = 0; i < centers.size(); i++) {
 		cout << centers[i] << " ";
 	}
 }
+
 
 Mat Core::getCusteredImg()
 {
@@ -164,7 +164,7 @@ Mat Core::getCusteredImg()
 	int min = 0;
 	vector<int> distances(centers.size(), 0);
 	vector<vector<int>> clusters(Core::getClusterNumbers());
-	vector<int> temp(3, 0);
+	vector<int> temp(centers.size(), 0);
 	vector<int> currentCenters;
 
 	do {
@@ -198,15 +198,27 @@ Mat Core::getCusteredImg()
 			}
 		}
 
-
 		int mediana = 0;
 		for (vector<int> row : clusters) {
 			int sum = 0;
 			for (int val : row) {
 				sum += val;
 			}
-			mediana = sum / row.size();
-			currentCenters.push_back(mediana);
+			if (row.size() != 0)
+			{
+				mediana = sum / row.size();
+				currentCenters.push_back(mediana);
+			}
+			else if (row.size() == 0) {
+				int num = 0;
+				for (int i = 0; i < centers.size(); i++)
+				{
+					do {
+						num = 0 + rand() % 255;
+					} while (num == centers[i]);
+				}
+				currentCenters.push_back(num);
+			}
 		}
 
 		centers = currentCenters;

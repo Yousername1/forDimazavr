@@ -4,8 +4,8 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <stdlib.h> 
 #include <vector>
-//#include "time.h"
-//#include <ctime>
+#include "time.h"
+#include <ctime>
 
 using namespace std;
 using namespace cv;

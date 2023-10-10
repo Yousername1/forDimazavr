@@ -2,8 +2,9 @@
 
 void main()
 {
+    srand(time(NULL));
 
-    Mat img = imread("../images/img1.jpg");
+    Mat img = imread("../images/img7.jpg");
     imshow("Source img", img);
 
     Core wImg(img);
